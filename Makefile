@@ -19,7 +19,7 @@ setup-woff2:
 build:
 	$(MAKE) clean
 	$(MAKE) compile-all
-	uv run python scripts/add_stat.py $(OUTPUT_DIR)/$(FONT_NAME)-Regular.ttf $(OUTPUT_DIR)/$(FONT_NAME)-Bold.ttf $(OUTPUT_DIR)/$(FONT_NAME)-Italic.ttf
+	uv run python $(SCRIPTS_DIR)/add_stat.py $(OUTPUT_DIR)/$(FONT_NAME)-Regular.ttf $(OUTPUT_DIR)/$(FONT_NAME)-Bold.ttf $(OUTPUT_DIR)/$(FONT_NAME)-Italic.ttf
 	uv run python $(SCRIPTS_DIR)/remove_calt.py $(OUTPUT_DIR) -o $(OUTPUT_DIR)/No-Ligatures
 	uv run python $(SCRIPTS_DIR)/build_zx_fonts.py
 
@@ -60,4 +60,6 @@ install:
 
 .PHONY: test
 test:
-	uv run fontbakery check-opentype fonts/**/**.ttf
+	uv run fontbakery check-opentype $(OUTPUT_DIR)/$(FONT_NAME)-*.ttf
+	uv run fontbakery check-opentype $(OUTPUT_DIR)/No-Ligatures/*.ttf
+	uv run fontbakery check-opentype $(OUTPUT_DIR)/ZxProto/*.ttf

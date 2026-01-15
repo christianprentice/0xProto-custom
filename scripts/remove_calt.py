@@ -12,14 +12,25 @@ import argparse
 def modify_font_name(font, suffix="-NL"):
     """
     Add suffix to font names in the name table and CFF table if present.
-    
+
     Args:
         font (TTFont): The font object
         suffix (str): Base suffix to add to the font names (without spacing)
     """
     # Remove the hyphen from the suffix as we'll add proper spacing dynamically
     base_suffix = suffix.lstrip('-')
-    
+
+    # Get the subfamily name (nameID 2) for use in Full font name modification
+    subfamily_name = None
+    if 'name' in font:
+        for record in font['name'].names:
+            if record.nameID == 2:
+                try:
+                    subfamily_name = record.toUnicode()
+                    break
+                except:
+                    pass
+
     # Update name table
     if 'name' in font:
         # Font name IDs to modify
@@ -32,33 +43,44 @@ def modify_font_name(font, suffix="-NL"):
         # 17: Typographic subfamily name
         # 21: WWS family name
         name_ids_to_modify = [1, 3, 4, 6, 16, 21]
-        
+
         for record in font['name'].names:
             if record.nameID in name_ids_to_modify:
                 # Decode the name string
                 try:
                     name_str = record.toUnicode()
-                    
+
                     # Skip if suffix is already applied
                     if name_str.endswith(f"-{base_suffix}") or name_str.endswith(f" {base_suffix}"):
                         continue
-                    
+
                     # Determine appropriate suffix format based on naming pattern
                     # Special case for PostScript name (always use hyphen for ID 6)
                     if record.nameID == 6:
                         actual_suffix = f"-{base_suffix}"
+                        new_name = name_str + actual_suffix
+                    # Special case for Full font name (nameID 4)
+                    # Insert suffix before the style name to ensure it starts with Family name
+                    # e.g., "0xProto Bold" -> "0xProto NL Bold"
+                    elif record.nameID == 4 and subfamily_name:
+                        # Find the style name at the end and insert suffix before it
+                        if name_str.endswith(f" {subfamily_name}"):
+                            base_name = name_str[:-len(f" {subfamily_name}")]
+                            new_name = f"{base_name} {base_suffix} {subfamily_name}"
+                        else:
+                            # Fallback: just append suffix
+                            new_name = name_str + f" {base_suffix}"
                     # For other names, check if they use hyphens or spaces
                     elif '-' in name_str and ' ' not in name_str:
                         actual_suffix = f"-{base_suffix}"
+                        new_name = name_str + actual_suffix
                     else:
                         actual_suffix = f" {base_suffix}"
-                    
-                    # Add suffix
-                    new_name = name_str + actual_suffix
-                    
+                        new_name = name_str + actual_suffix
+
                     # Update the record
                     record.string = new_name.encode(record.getEncoding())
-                    
+
                     print(f"  - Updated name ID {record.nameID}: {name_str} -> {new_name}")
                 except Exception as e:
                     print(f"  - Error updating name ID {record.nameID}: {e}")
@@ -97,24 +119,29 @@ def modify_font_name(font, suffix="-NL"):
                 old_name = cff_font.FullName
                 # Convert to string for comparison if it's bytes
                 old_name_str = old_name.decode('ascii', errors='replace') if isinstance(old_name, bytes) else old_name
-                
+
                 # Skip if suffix is already applied
                 if old_name_str.endswith(f"-{base_suffix}") or old_name_str.endswith(f" {base_suffix}"):
                     pass
                 else:
-                    # Determine format based on existing name
-                    if '-' in old_name_str and ' ' not in old_name_str:
-                        actual_suffix = f"-{base_suffix}"
+                    # Insert suffix before the style name if subfamily is known
+                    if subfamily_name and old_name_str.endswith(f" {subfamily_name}"):
+                        base_name = old_name_str[:-len(f" {subfamily_name}")]
+                        new_name_str = f"{base_name} {base_suffix} {subfamily_name}"
                     else:
-                        actual_suffix = f" {base_suffix}"
-                    
+                        # Fallback: just append suffix
+                        if '-' in old_name_str and ' ' not in old_name_str:
+                            new_name_str = old_name_str + f"-{base_suffix}"
+                        else:
+                            new_name_str = old_name_str + f" {base_suffix}"
+
                     # Convert suffix to bytes if the original is bytes
                     if isinstance(old_name, bytes):
-                        cff_font.FullName = old_name + actual_suffix.encode('ascii')
+                        cff_font.FullName = new_name_str.encode('ascii')
                     else:
-                        cff_font.FullName = old_name + actual_suffix
-                    
-                    print(f"  - Updated CFF FullName: {old_name_str} -> {cff_font.FullName.decode('ascii', errors='replace') if isinstance(cff_font.FullName, bytes) else cff_font.FullName}")
+                        cff_font.FullName = new_name_str
+
+                    print(f"  - Updated CFF FullName: {old_name_str} -> {new_name_str}")
             
             # Update CFF font Family Name
             if hasattr(cff_font, 'FamilyName'):
