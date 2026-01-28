@@ -50,7 +50,7 @@ value = 0;
 }
 );
 date = "2026-01-16 01:39:15 +0000";
-familyName = 0xProto;
+familyName = 0xProto-custom;
 featurePrefixes = (
 {
 automatic = 1;
@@ -1001,7 +1001,7 @@ key = postscriptFullNames;
 values = (
 {
 language = dflt;
-value = "0xProto Regular";
+value = "0xProto-custom Regular";
 }
 );
 }
@@ -1022,7 +1022,7 @@ key = postscriptFullNames;
 values = (
 {
 language = dflt;
-value = "0xProto Bold";
+value = "0xProto-custom Bold";
 }
 );
 }

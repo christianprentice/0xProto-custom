@@ -1,111 +1,20 @@
-# 0xProto
+# 0xProto-Custom
 
-[0xProto](https://github.com/0xType/0xProto) is a programming font focused on source code **legibility**.
+`0xProto-Custom` is a derivative of the `0xProto` font, which was originally created by the [0xType Project Authors](https://github.com/0xType). This custom version introduces modifications to the original font structure and build process while adhering to the SIL Open Font License (OFL) version 1.1.
+This repository represents the font that has been customized and slimmed down for my own needs.
 
-Ensuring code **readability** is your own responsibility ;)
-
-![0xProto](./images/examples.png)
-
-## Installation
-
-1. [Download font files](https://github.com/0xType/0xProto/releases/latest)
-1. Unzip the archive and install the font:
-   - macOS: Drag & Drop the font file to Font Book (or the other font management app)
-   - Windows: right-click any of them, then pick `Install` from the menu
-
-## Features
-
-### 1. Clear differentiation
-
-When it comes to programming fonts, legibility is paramount, particularly the clear differentiation of each letter.
-Maintaining clarity in coding is critical as it minimizes ambiguity and helps prevent errors that could lead to software bugs.
-
-![Distinction](./images/distinction.png)
-
-0xProto is a cohesive font ingeniously designed to enhance differentiation between similar-looking letters.
-
-### 2. Legibility in small font size
-
-Software engineers often work with fonts in small print on their preferred text editor or terminal software. Thus, we've adjusted the font to ensure that the interior of each character is sufficiently wide to be easily visible, even at smaller font sizes.
-
-![Legibility in small font size](./images/legibility.png)
-
-Additionally, there's a feature called [Texture Healing](https://github.com/githubnext/monaspace/blob/main/docs/Texture%20Healing.md) that enhances the legibility of naturally wide characters like `m`.
-This feature slightly widens characters like `m` to improve legibility when they're next to narrower characters like `i` and `l`, or symbols like periods, colons, and spaces, while still keeping them within their monospace width. GitHub incorporates this feature in '[monaspace](https://github.com/githubnext/monaspace)'.
-
-![Texture Healing](./images/texture-healing.gif)
-
-### 3. More whitespace
-
-Compared to regular typefaces, monospaced fonts often exhibit uneven distribution of dark and light spaces. 0xProto effectively mitigates this issue by employing unique letter shapes to maintain visual balance.
-
-![More whitespace](./images/whitespace.png)
-
-### 4. Ligatures that DON'T deform shape
-
-Software engineers frequently use a variety of symbols while programming.
-
-As [Fira Code suggests](https://github.com/tonsky/FiraCode#problem), sequences such as `:=` or `=>` function as single logical tokens, even though they are composed of two characters on the screen.
-However, many programming fonts, such as Fira Code, use ligatures, for example, to change the appearance of `!=` to change its appearance to `≠` and other ligatures. Although `!=` is commonly used to represent `≠` in many programming languages, in my view, ligatures that alter the original meaning do not truly fit the definition of "ligatures".
-
-From a functional or usability standpoint, ligatures that transform the meaning of `≠` or other overly distorted ligatures make it challenging to anticipate their meaning if any part of the string is erased.
-
-![Ligatures that DON'T deform shape](./images/ligatures.png)
-
-For these reasons, 0xProto has made a conscious decision to abstain from using ligatures that modify both meaning and form.
-
-If you prefer the programming ligature so far, I recommend Fira Code because it is very clean and useful!
-
-## OpenType features
-
-### Script Variant (`ss01`)
-
-In the Italic family of 0xProto, some characters can be changed to script.
-
-![Script Variant](./images/ss01.png)
-
-How to enable:
-
-- [Visual Studio Code](https://github.com/microsoft/vscode/issues/84018)
-- [other tools](https://github.com/tonsky/FiraCode/wiki/How-to-enable-stylistic-sets)
-  - This is a Fira Code document; the Script Variant for 0xProto is `ss01`.
-
-## How to use 0xProto in Visual Studio Code
-
-1. Open `Settings`
-1. Go `Text Editor` -> `Font` -> `Font Family`
-1. Input box type: `"0xProto"` (Enclose `0xProto` in quotation marks `'` or double quotation marks `"`.)
-
-To enable ligatures:
-
-1. Go `Text Editor` -> `Font` -> `Font Ligatures`
-1. Click `Edit in settings.json`
-1. Change `"editor.fontLigatures"` to `true` in `settings.json`
-
-## Quick Q&A
-
-**Q. Can I legally use 0xProto for my purpose?**
-
-A. Most likely YES. 0xProto is free and open source. For details, [read the LICENSE](./LICENSE).
-
-**Q. Where can I get 0xProto?**
-
-A. [Here](https://github.com/0xType/0xProto/releases)
-
-**Q. What is "0xProto NL"?**
-
-No Ligatures fonts. Why: https://github.com/0xType/0xProto/issues/116
-
-**Q. What is "Zx Proto"?**
-
-Same as 0xProto. Why: https://github.com/0xType/0xProto/pull/112
-
-**Q. Other questions?**
-
-Feel free to [create an issue](https://github.com/0xType/0xProto/issues?q=is%3Aissue%20) and ask questions. But please make sure that there is a previous issue with the same question.
+## Changes in `0xProto-Custom`
+The following notable modifications have been made to the original `0xProto` project:
+- **Font Files Removed**: All `.woff2` files from the `fonts` directory have been removed.
+- **Makefile Updated**: The `Makefile` has been modified to reflect customizations and edits to the font workflow.
 
 ## License
+This font software is licensed under the [SIL Open Font License (OFL) Version 1.1](https://scripts.sil.org/OFL). Any derivative work must also retain this license.
 
-The SIL Open Font License, Version 1.1
+## Acknowledgements
+This project is based on the original `0xProto` font, created by the [0xType Project Authors](https://github.com/0xType).
 
-Copyright (c) 2026 [0xType](https://0xtype.dev)
+For more information about the SIL Open Font License, see the `LICENSE` file included in this repository or visit [http://scripts.sil.org/OFL](http://scripts.sil.org/OFL).
+
+## Disclaimer
+This project is an independent fork of `0xProto` and is not affiliated with or endorsed by the original authors.
